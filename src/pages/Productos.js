@@ -13,7 +13,7 @@ import {
 import NavBar from "../components/NavBar";
 import { productosData } from "../data/productos";
 
-const itemsLocalStorage = [];
+const itemsLocalStorage =  [];
 
 const Productos = () => {
   const [monto, setMonto] = useState(0);
@@ -21,7 +21,6 @@ const Productos = () => {
 
   const agregarSaltena = (id) => {
     const cantidadActual = newVenta.filter((x) => x.id === id);
-    const valordiferente = newVenta.filter((x) => x.id !== id);
     const ca = cantidadActual[0].cantidad + 1;
     setMonto(monto + cantidadActual[0].precio);
     const as = newVenta.map((x) =>
@@ -34,38 +33,68 @@ const Productos = () => {
     );
     setNewVenta(as);
 
-    if (cantidadActual[0].cantidad === 0) {
+    // console.log(itemsLocalStorage);
+    let flag = false;
+    itemsLocalStorage.map((item) => {
+      console.log(item.id, id);
+      if (item.id === id) {
+        item.cantidad = item.cantidad + 1;
+        flag = true
+      }
+    });
+
+    if (!flag)
       itemsLocalStorage.push({
         id,
-        cantidad: ca,
+        cantidad: 1,
         nombre: cantidadActual[0].nombre,
         precio: cantidadActual[0].precio,
       });
+
+    if (itemsLocalStorage.length === 0) {
+      itemsLocalStorage.push({
+        id,
+        cantidad: 1,
+        nombre: cantidadActual[0].nombre,
+        precio: cantidadActual[0].precio,
+      });
+    }
     localStorage.setItem("items", JSON.stringify(itemsLocalStorage));
 
-    } else {
-      const detalle_venta = localStorage.getItem("items");
-      const data = JSON.parse(detalle_venta)
-      const can = cantidadActual[0].cantidad + 1
-      console.log(can);
-      console.log(data);
-      const aitemsLocalStorage = data.map((x) =>
-        x.id === id
-          ? {
-              ...x,
-              cantidad: can,
-            }
-          : x
-      );
-      localStorage.setItem("items", JSON.stringify(aitemsLocalStorage));
+    // if (cantidadActual[0].cantidad === 0 && cantidadActual[0].id === id) {
 
-    }
+    //   itemsLocalStorage.push({
+    //     id,
+    //     cantidad: ca,
+    //     nombre: cantidadActual[0].nombre,
+    //     precio: cantidadActual[0].precio,
+    //   });
+    // localStorage.setItem("items", JSON.stringify(itemsLocalStorage));
+
+    // } else {
+    //   const detalle_venta = localStorage.getItem("items");
+    //   const data = JSON.parse(detalle_venta)
+    //   const can = cantidadActual[0].cantidad + 1
+    //   console.log(can);
+    //   console.log(data);
+    //   const aitemsLocalStorage = data.map((x) =>
+    //     x.id === id
+    //       ? {
+    //           ...x,
+    //           cantidad: can,
+    //         }
+    //       : x
+    //   );
+    //   localStorage.setItem("items", JSON.stringify(aitemsLocalStorage));
+
+    // }
   };
 
   const quitarSaltena = (id) => {
     const cantidadActual = newVenta.filter((x) => x.id === id);
     const ca = cantidadActual[0].cantidad - 1;
     setMonto(monto - cantidadActual[0].precio);
+
     const as = newVenta.map((x) =>
       x.id === id
         ? {
@@ -75,21 +104,22 @@ const Productos = () => {
         : x
     );
     setNewVenta(as);
-    
+
     const detalle_venta = localStorage.getItem("items");
-      const data = JSON.parse(detalle_venta)
-      const can = cantidadActual[0].cantidad - 1
-      console.log(can);
-      console.log(data);
-      const aitemsLocalStorage = data.map((x) =>
-        x.id === id
-          ? {
-              ...x,
-              cantidad: can,
-            }
-          : x
-      );
-      localStorage.setItem("items", JSON.stringify(aitemsLocalStorage));
+    const data = JSON.parse(detalle_venta);
+    const can = cantidadActual[0].cantidad - 1;
+    console.log(can);
+    console.log(data);
+  
+    const aitemsLocalStorage = data.map((x) =>
+      x.id === id
+        ? {
+            ...x,
+            cantidad: can,
+          }
+        : x
+    );
+    localStorage.setItem("items", JSON.stringify(aitemsLocalStorage));
   };
 
   useEffect(() => {}, [newVenta]);

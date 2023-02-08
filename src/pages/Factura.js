@@ -129,7 +129,7 @@ const Factura = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item) => (
+                  {data.map((item) => item.cantidad>0 && (
                     <tr>
                       <th scope="row">{item.cantidad}</th>
                       <td>{item.nombre}</td>
@@ -206,7 +206,7 @@ const Factura = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {data.map((item) => item.cantidad>0 && (
                 <tr>
                   <th scope="row">{item.cantidad}</th>
                   <td>{item.nombre}</td>
