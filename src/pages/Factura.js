@@ -15,6 +15,7 @@ import {
 import NavBar from "../components/NavBar";
 
 const Factura = () => {
+  const [guardado, setGuardado] = useState(false);
   const detalle_venta = localStorage.getItem("items");
   var canti = 0;
   const p = false;
@@ -51,13 +52,7 @@ const Factura = () => {
     if (respuesta?.error) {
       alert("Algo ocurrio mal...");
     } else {
-      const conf = window.confirm(
-        "Se guardo la venta se realizo con exito, ¿Desea volver al menu de productos?"
-      );
-      if (conf) {
-        window.location.href = "/home/productos";
-      }
-      localStorage.removeItem("items");
+      setGuardado(true);
     }
   };
 
@@ -73,17 +68,16 @@ const Factura = () => {
     });
     console.log(datos);
   };
-  const cancelar= () =>{
+  const cancelar = () => {
     alert("Seguro que quiere cancelar");
     window.location.href = "/home/productos";
     localStorage.removeItem("items");
-  }
+  };
 
   const componetRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componetRef.current,
     documentTitle: "emp-data",
-    onAfterPrint: () => alert("Print success"),
   });
   return (
     <>
@@ -129,14 +123,17 @@ const Factura = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item) => item.cantidad>0 && (
-                    <tr>
-                      <th scope="row">{item.cantidad}</th>
-                      <td>{item.nombre}</td>
-                      <td>{item.precio}</td>
-                      <td>{item.cantidad * item.precio}</td>
-                    </tr>
-                  ))}
+                  {data.map(
+                    (item) =>
+                      item.cantidad > 0 && (
+                        <tr>
+                          <th scope="row">{item.cantidad}</th>
+                          <td>{item.nombre}</td>
+                          <td>{item.precio}</td>
+                          <td>{item.cantidad * item.precio}</td>
+                        </tr>
+                      )
+                  )}
                 </tbody>
               </Table>
             </Row>
@@ -145,82 +142,97 @@ const Factura = () => {
                 <h6>Monto Total : {canti}</h6>
               </Col>
               <Col className="text-end">
-                <Button className="mx-2" color="danger" onClick={handlePrint}>
-                  Imprimir
-                </Button>
-                <Button
-                  color="secondary"
-                  className="mx-2"
-                  onClick={() => cobrar()}
-                >
-                  Guardar
-                </Button>
+                {!guardado && (
+                  <Button
+                    color="success"
+                    className="mx-2"
+                    onClick={() => cobrar()}
+                  >
+                    Guardar
+                  </Button>
+                )}
 
-                <Button color="danger" onClick={()=>cancelar()}>Cancelar</Button>
+                {guardado && (
+                  <Button
+                    className="mx-2"
+                    color="primary"
+                    onClick={handlePrint}
+                  >
+                    Imprimir
+                  </Button>
+                )}
+                <Button color="danger" onClick={() => cancelar()}>
+                  Cancelar
+                </Button>
               </Col>
             </Row>
           </Form>
         </Card>
       </Container>
-      <div
-        ref={componetRef}
-        style={{
-          padding: "50px",
-          width: "100%",
-          height: window.innerHeight,
-          marginTop: "30px",
-          fontFamily: "monospace",
-        }}
-        className="border"
-      >
-        <div className="row p-4">
-          <div className="col-4">
-            <p style={{ lineHeight: "0px" }}>Salteñas La Paz</p>
-            <p style={{ lineHeight: "5px" }}>La Paz - Bolivia</p>
+      {guardado && (
+        <div
+          ref={componetRef}
+          style={{
+            padding: "50px",
+            width: "100%",
+            height: window.innerHeight,
+            marginTop: "30px",
+            fontFamily: "monospace",
+          }}
+          className="border"
+        >
+          <div className="row p-4">
+            <div className="col-4">
+              <p style={{ lineHeight: "0px" }}>Salteñas La Paz</p>
+              <p style={{ lineHeight: "5px" }}>La Paz - Bolivia</p>
+            </div>
+            <div className="col-6">
+              <p style={{ lineHeight: "0px" }}>Telf: 72637456</p>
+              <p style={{ lineHeight: "5px" }}>Web: www.saltenaLaPaz.com</p>
+            </div>
           </div>
-          <div className="col-6">
-            <p style={{ lineHeight: "0px" }}>Telf: 72637456</p>
-            <p style={{ lineHeight: "5px" }}>Web: www.saltenaLaPaz.com</p>
+          <hr />
+          <h3 className="text-center p-3">FACTURA</h3>
+          <div className="row p-4">
+            <div className="col-6 d-flex">
+              <h6>Nombre Cliente:</h6>
+              <h6>{datos.nombreCompleto}</h6>
+            </div>
+            <div className="col-6 d-flex">
+              <h6>Nit o CI:</h6>
+              <h6>{datos.nit}</h6>
+            </div>
           </div>
-        </div>
-        <hr />
-        <h3 className="text-center p-3">FACTURA</h3>
-        <div className="row p-4">
-          <div className="col-6 d-flex">
-            <h6>Nombre Cliente:</h6>
-            <h6>{datos.nombreCompleto}</h6>
-          </div>
-          <div className="col-6 d-flex">
-            <h6>Nit o CI:</h6>
-            <h6>{datos.nit}</h6>
-          </div>
-        </div>
-        <Row className="p-5">
-          <Table className="w-70 mx-auto bordered">
-            <thead>
-              <tr>
-                <th>Cantidad</th>
-                <th>Producto</th>
-                <th>Precio por unidad</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item) => item.cantidad>0 && (
+          <Row className="p-5">
+            <Table className="w-70 mx-auto bordered">
+              <thead>
                 <tr>
-                  <th scope="row">{item.cantidad}</th>
-                  <td>{item.nombre}</td>
-                  <td>{item.precio}</td>
-                  <td>{item.cantidad * item.precio}</td>
+                  <th>Cantidad</th>
+                  <th>Producto</th>
+                  <th>Precio por unidad</th>
+                  <th>Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <h4 className="pt-3 p-5 d-flex align-items-end justify-content-end">
-            Total: {canti}
-          </h4>
-        </Row>
-      </div>
+              </thead>
+              <tbody>
+                {data.map(
+                  (item) =>
+                    item.cantidad > 0 && (
+                      <tr>
+                        <th scope="row">{item.cantidad}</th>
+                        <td>{item.nombre}</td>
+                        <td>{item.precio}</td>
+                        <td>{item.cantidad * item.precio}</td>
+                      </tr>
+                    )
+                )}
+              </tbody>
+            </Table>
+            <h4 className="pt-3 p-5 d-flex align-items-end justify-content-end">
+              Total: {canti}
+            </h4>
+          </Row>
+        </div>
+      )}
     </>
   );
 };
