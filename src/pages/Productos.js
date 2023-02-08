@@ -11,18 +11,19 @@ import {
   Row,
 } from "reactstrap";
 import NavBar from "../components/NavBar";
-import { productosData, productosRefrescosData } from "../data/productos";
+import { productosData } from "../data/productos";
+
+const itemsLocalStorage = [];
 
 const Productos = () => {
   const [monto, setMonto] = useState(0);
   const [newVenta, setNewVenta] = useState(productosData);
-  const [newVentaRe, setNewVentaRe] = useState(productosRefrescosData);
 
   const agregarSaltena = (id) => {
     const cantidadActual = newVenta.filter((x) => x.id === id);
+    const valordiferente = newVenta.filter((x) => x.id !== id);
     const ca = cantidadActual[0].cantidad + 1;
     setMonto(monto + cantidadActual[0].precio);
-    console.log(newVenta);
     const as = newVenta.map((x) =>
       x.id === id
         ? {
@@ -32,24 +33,33 @@ const Productos = () => {
         : x
     );
     setNewVenta(as);
-    console.log(newVenta);
-  };
 
-  const agregarRefresco = (id) => {
-    const cantidadActual = newVentaRe.filter((x) => x.id === id);
-    const ca = cantidadActual[0].cantidad + 1;
-    setMonto(monto + cantidadActual[0].precio);
-    console.log(newVenta);
-    const as = newVentaRe.map((x) =>
-      x.id === id
-        ? {
-            ...x,
-            cantidad: ca,
-          }
-        : x
-    );
-    setNewVentaRe(as);
-    console.log(newVenta);
+    if (cantidadActual[0].cantidad === 0) {
+      itemsLocalStorage.push({
+        id,
+        cantidad: ca,
+        nombre: cantidadActual[0].nombre,
+        precio: cantidadActual[0].precio,
+      });
+    localStorage.setItem("items", JSON.stringify(itemsLocalStorage));
+
+    } else {
+      const detalle_venta = localStorage.getItem("items");
+      const data = JSON.parse(detalle_venta)
+      const can = cantidadActual[0].cantidad + 1
+      console.log(can);
+      console.log(data);
+      const aitemsLocalStorage = data.map((x) =>
+        x.id === id
+          ? {
+              ...x,
+              cantidad: can,
+            }
+          : x
+      );
+      localStorage.setItem("items", JSON.stringify(aitemsLocalStorage));
+
+    }
   };
 
   const quitarSaltena = (id) => {
@@ -65,22 +75,21 @@ const Productos = () => {
         : x
     );
     setNewVenta(as);
-    console.log(newVenta);
-  };
-  const quitarRefresco = (id) => {
-    const cantidadActual = newVentaRe.filter((x) => x.id === id);
-    const ca = cantidadActual[0].cantidad - 1;
-    setMonto(monto - cantidadActual[0].precio);
-    const as = newVentaRe.map((x) =>
-      x.id === id
-        ? {
-            ...x,
-            cantidad: ca,
-          }
-        : x
-    );
-    setNewVentaRe(as);
-    console.log(newVenta);
+    
+    const detalle_venta = localStorage.getItem("items");
+      const data = JSON.parse(detalle_venta)
+      const can = cantidadActual[0].cantidad - 1
+      console.log(can);
+      console.log(data);
+      const aitemsLocalStorage = data.map((x) =>
+        x.id === id
+          ? {
+              ...x,
+              cantidad: can,
+            }
+          : x
+      );
+      localStorage.setItem("items", JSON.stringify(aitemsLocalStorage));
   };
 
   useEffect(() => {}, [newVenta]);
@@ -136,56 +145,6 @@ const Productos = () => {
                         </Col>
                       </Row>
                     </CardBody>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-
-            <h6 className="pt-4">Refrescos:</h6>
-            <Row>
-              {newVentaRe.map((item) => (
-                <Col
-                  xs="12"
-                  md="6"
-                  xl="3"
-                  className="pt-3 d-flex text-center align-items-center justify-content-center"
-                >
-                  <Card
-                    className="p-4"
-                    style={{
-                      width: "18rem",
-                    }}
-                  >
-                    <img alt="Sample" src={item.image} />
-                    <CardBody>
-                      <CardTitle tag="h5">{item.nombre}</CardTitle>
-                      <CardSubtitle className="mb-2 text-muted" tag="h6">
-                        Precio: {item.precio} bs
-                      </CardSubtitle>
-                    </CardBody>
-                    <Row className="text-center">
-                      <Col xs="5" md="5" xl="5">
-                        {item.cantidad > 0 && (
-                          <Button
-                            outline
-                            onClick={() => quitarRefresco(item.id)}
-                          >
-                            -
-                          </Button>
-                        )}
-                      </Col>
-                      <Col xs="2" md="2" xl="2">
-                        {item.cantidad}
-                      </Col>
-                      <Col xs="5" md="5" xl="5">
-                        <Button
-                          onClick={() => agregarRefresco(item.id)}
-                          outline
-                        >
-                          +
-                        </Button>
-                      </Col>
-                    </Row>
                   </Card>
                 </Col>
               ))}

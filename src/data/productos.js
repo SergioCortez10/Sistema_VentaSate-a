@@ -27,33 +27,29 @@ export const productosData = [
         image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Salte%C3%B1as_%28Plaza_Mayor%29-2011.JPG/1280px-Salte%C3%B1as_%28Plaza_Mayor%29-2011.JPG',
         cantidad:0,
     },
-
-]
-
-export const productosRefrescosData = [
     {
-        id:1,
+        id:5,
         nombre:"Soda Personal",
         precio: 2,
         image: 'https://supermarketbochalema.viveshops.co/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBMDliUlE9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--b9896556427e0667c63f3d03c6058ad62be4006a/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9TY21WemFYcGxYM1J2WDJacGRGc0hhUUlnQTJrQ0lBTTZER052Ym5abGNuUkpJZ2hxY0djR09nWkZWRG9LYzJGMlpYSjdDRG9NY1hWaGJHbDBlV2xmT2dwemRISnBjRlE2RDJKaFkydG5jbTkxYm1SYkNHa0IvMmtCLzJrQi93PT0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--f9b6205701877dad933126b17f2a1a57fbbba520/7702535001028.jpg?locale=es',
         cantidad:0,
     },
     {
-        id:2,
+        id:6,
         nombre:"Soda de 1 litro",
         precio: 7,
         image: 'https://cdn.shopify.com/s/files/1/0555/3038/9604/products/cocacola1litro.png?v=1653433258',
         cantidad:0,
     },
     {
-        id:3,
+        id:7,
         nombre:"Soda de 2 litros",
         precio: 11,
         image: 'https://cdn.shopify.com/s/files/1/0555/3038/9604/products/cocacola1litro.png?v=1653433258',
         cantidad:0,
     },
     {
-        id:4,
+        id:8,
         nombre:"Soda de 3 litros",
         precio: 14,
         image: 'https://fsa.bo/productos/04432-01.jpg',
@@ -61,6 +57,7 @@ export const productosRefrescosData = [
     },
 
 ]
+
 
 export const staditica=[
     {
