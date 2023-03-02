@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Col, Container, Input, Label, Row } from "reactstrap";
 import NavBar from "../components/NavBar";
 
+// Este es un comentario
 import {
   Chart as ChartJS,
   BarElement,
